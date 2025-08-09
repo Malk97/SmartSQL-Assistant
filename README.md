@@ -68,8 +68,6 @@ The employee dataset (`employee_data.csv`) was cleaned using the following steps
 
 
 
-إذا تريدني أجهز لك ملف بصيغة `.md` جاهز، أخبرني!
-
 
 
 

@@ -57,51 +57,19 @@ The employee dataset (`employee_data.csv`) was cleaned using the following steps
 
 ---
 
-## Example Data Cleaning Code
+## Dependencies
+- Python 3.10
+- Streamlit
+- LangChain
+- HuggingFace Transformers
+- FAISS
+- mysql-connector-python
+- Groq API client
 
-```python
-import pandas as pd
-from dateutil.parser import parse
-from datetime import datetime
 
-E1 = pd.read_csv("employee_data.csv")
 
-E1['ExitDate'] = E1['ExitDate'].apply(lambda x: parse(x, dayfirst=True) if pd.notnull(x) else None)
-current_date = datetime.now().strftime('%Y-%m-%d')
-E1['ExitDate'].fillna(current_date, inplace=True)
+إذا تريدني أجهز لك ملف بصيغة `.md` جاهز، أخبرني!
 
-E1['TerminationDescription'].fillna("Still Working", inplace=True)
-E1.loc[E1['TerminationType'] == 'Unk', 'TerminationType'] = 'Still Working'
 
-E1['StartDate'] = E1['StartDate'].apply(lambda x: parse(x, dayfirst=True) if pd.notnull(x) else None)
 
-E1['Age'] = E1['DOB'].apply(lambda x: parse(x, dayfirst=True).year if pd.notnull(x) else None)
-current_year = pd.Timestamp('today').year
-E1['Age'] = current_year - E1['Age']
-E1.drop('DOB', axis=1, inplace=True)
 
-business_unit_mapping = {
-    'BPC': 'Business Planning and Control',
-    # ... other mappings
-}
-E1['BusinessUnit'] = E1['BusinessUnit'].map(business_unit_mapping).fillna(E1['BusinessUnit'])
-
-state_mapping = {
-    'AL': 'Alabama',
-    # ... other mappings
-}
-E1['State'] = E1['State'].map(state_mapping).fillna(E1['State'])
-
-payzone_mapping = {
-    'Zone A': 'Entry-Level Salary',
-    'Zone B': 'Mid-Level Salary',
-    'Zone C': 'Senior-Level Salary'
-}
-E1['PayZone'] = E1['PayZone'].map(payzone_mapping).fillna(E1['PayZone'])
-
-E1_part1 = E1[['EmpID', 'FirstName', 'LastName', 'StartDate', 'Title', 'Supervisor', 'ADEmail', 'BusinessUnit',
-               'EmployeeStatus', 'EmployeeType', 'PayZone', 'EmployeeClassificationType', 'DepartmentType',
-               'Division', 'State', 'JobFunctionDescription', 'Gender', 'LocationCode', 'Race_Desc',
-               'Marital_Desc', 'Performance_Score', 'Current_Employee_Rating', 'Age']]
-
-E1_part2 = E1[['EmpID', 'ExitDate', 'TerminationType', 'TerminationDescription']]
